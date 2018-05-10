@@ -142,6 +142,92 @@ private:
 		}
 	}
 
+	Node* maximum(Node* node)
+	{
+		if (node == NULL)
+			return NULL;
+
+		/*
+		if (node.right == NULL)
+			return node;
+		return minimum(node->right);
+		*/
+		Node* temp = node;
+		while (temp->right != NULL)
+			temp = temp->right;
+		return temp;
+	}
+
+	Node* minimum(Node* node)
+	{
+		if (node == NULL)
+			return NULL;
+
+		if (node->left == NULL)
+			return node;
+		return minimum(node->left);
+
+		/*
+		Node* temp = node;
+		while (temp->left != NULL)
+			temp = temp->left;
+		return temp;
+		*/
+	}
+
+	Node* removeMax(Node* node)
+	{
+		if (node == NULL)
+			return NULL;
+
+		if (node->right == NULL)
+		{
+			Node* leftNode = node->left;
+			this->count--;
+			delete node;
+			return leftNode;
+		}
+		node->right = removeMax(node->right);
+		return node;
+	}
+
+	Node* removeMin(Node* node)
+	{
+		if (node == NULL)
+			return NULL;
+		/*
+		if (node->left == NULL)
+		{
+			Node* rightNode = node->right;
+			this->count--;
+			delete node;
+			return rightNode;
+		}
+		node->left = removeMin(node->left);
+		return node;
+		*/
+
+		if (node->left == NULL)
+		{
+			Node* rightNode = node->right;
+			delete node;
+			this->count--;
+			return rightNode;
+		}
+
+		Node* temp = node;
+		Node* tempRoot = NULL;
+		while (temp->left)
+		{
+			tempRoot = temp;
+			temp = temp->left;
+		}
+		tempRoot->left = temp->right;
+		delete temp;
+		this->count--;
+		return node;
+	}
+
 #pragma endregion methods
 
 public:
@@ -160,7 +246,7 @@ public:
 
 #pragma endregion construction and deconstruction
 
-#pragma region methods
+#pragma region public methods
 
 	int size()
 	{
@@ -206,6 +292,37 @@ public:
 	{
 		levelOrder(this->root);
 	}
-#pragma endregion methods
+
+	// return the key of the minimum node
+	Key minimun()
+	{
+		assert(this->count > 0);
+		Node* minNode = minimum(this->root);
+		return minNode->key;
+	}
+
+	// return the key of the maximum node
+	Key maximun()
+	{
+		assert(this->count > 0);
+		Node* maxNode = maximum(this->root);
+		return maxNode->key;
+	}
+
+	// Remove the largest node from the binary search tree
+	void removeMax()
+	{
+		if (this->root)
+			removeMax(this->root);
+	}
+
+	// Remove the smallest node from the binary search tree
+	void removeMin()
+	{
+		if (this->root)
+			removeMin(this->root);
+	}
+
+#pragma endregion public methods
 
 };
