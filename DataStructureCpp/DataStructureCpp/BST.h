@@ -83,7 +83,7 @@ private:
 		if (node == NULL)
 			return;
 
-		cout << node->key << endl;
+		cout << node->key << " ";
 		preOrder(node->left);
 		preOrder(node->right);
 	}
@@ -94,7 +94,7 @@ private:
 			return;
 
 		inOrder(node->left);
-		cout << node->key << endl;
+		cout << node->key << " ";
 		inOrder(node->right);
 	}
 
@@ -105,7 +105,7 @@ private:
 
 		postOrder(node->left);
 		postOrder(node->right);
-		cout << node->key << endl;
+		cout << node->key << " ";
 	}
 
 	void levelOrder(Node* node)
@@ -124,7 +124,7 @@ private:
 			if (node->right)
 				q.push(node->right);
 
-			cout << node->key << endl;
+			cout << node->key << " ";
 			q.pop();
 		}
 
