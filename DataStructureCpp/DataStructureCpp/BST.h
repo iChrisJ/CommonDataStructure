@@ -23,6 +23,14 @@ private:
 			this->value = value;
 			this->left = this->right = NULL;
 		}
+
+		Node(Node *node)
+		{
+			this->key = node->key;
+			this->value = node->value;
+			this->left = node->left;
+			this->right = node->right;
+		}
 	};
 
 	Node* root;
@@ -228,6 +236,55 @@ private:
 		return node;
 	}
 
+	// Remove the node with specified key from the "node"-rooted binary search tree
+	// Return the new root after the node is removed
+	Node* remove(Node* node, Key key)
+	{
+		if (node == NULL)
+			return NULL;
+
+		if (key < node->key)
+		{
+			node->left = remove(node->left, key);
+			return node;
+		}
+		else if (key > node->key)
+		{
+			node->right = remove(node->right, key);
+			return node;
+		}
+		else // key == node->key
+		{
+			if (node->left == NULL)
+			{
+				Node* rightNode = node->right;
+				delete node;
+				this->count--;
+				return rightNode;
+			}
+
+			if (node->right == NULL)
+			{
+				Node* leftNode = node->left;
+				delete node;
+				this->count--;
+				return leftNode;
+			}
+
+			// node->left != NULL && node->right != NULL
+			Node* successor = new Node(minimum(node->right));
+			this->count++;
+
+			successor->right = removeMin(node->right);
+			successor->left = node->left;
+
+			delete node;
+			this->count--;
+
+			return successor;
+		}
+	}
+
 #pragma endregion methods
 
 public:
@@ -321,6 +378,22 @@ public:
 	{
 		if (this->root)
 			removeMin(this->root);
+	}
+
+	// Remove the node with specified key from the binary search tree
+	void remove(Key key)
+	{
+		root = remove(root, key);
+	}
+
+	void shuffle(int arr[], int n)
+	{
+		srand(time(NULL));
+		for (int i = n - 1; i >= 0; i--)
+		{
+			int x = rand() % (i + 1);
+			swap(arr[i], arr[x]);
+		}
 	}
 
 #pragma endregion public methods
